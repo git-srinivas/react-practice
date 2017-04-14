@@ -1,10 +1,23 @@
 import React from 'react';
 
 class App extends React.Component {
+
+  constructor(){
+    super();
+    this.state = {
+      txt:'first react',
+      cat:0
+    }
+  }
+    update(e){
+this.setState({txt:e.target.value})
+    }
+  
   render() {
     return (
       <div>
-      <h1>{this.props.txt}</h1>
+        <input type="text" onChange={this.update.bind(this)}/>
+      <h1>{this.state.txt} - {this.state.cat}</h1>
       <b>Bold</b>
       </div>
     )
