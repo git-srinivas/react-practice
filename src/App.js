@@ -1,37 +1,41 @@
-import React from 'react';
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
+import {TodoForm,TodoList} from './components/todo'
 
-class App extends React.Component {
-
+class App extends Component {
   constructor(){
     super();
     this.state = {
-      txt:'first react',
-      cat:0
-    }
+      todos:[
+        {id:1,name:'Learn JSX cool',isComplete:false},
+        {id:2,name:'Build an Awesome App',isComplete:false},
+        {id:3,name:'Ship It!',isComplete:false}
+      ],
+    currentTodo : ''
+    }  
+    this.update = this.update.bind(this)
   }
-    update(e){
-this.setState({txt:e.target.value})
-    }
-  
+  update(e){
+    this.setState({
+      currentTodo : e.target.value
+    });
+  }
   render() {
     return (
-      <div>
-        <input type="text" onChange={this.update.bind(this)}/>
-      <h1>{this.state.txt} - {this.state.cat}</h1>
-      <b>Bold</b>
-      </div>
-    )
-  
-}
-}
+      <div className="App">
+        <div className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <h2>React Todos</h2>
+        </div>
+        <div className="Todo-App">
+          <TodoForm currentTodo={this.state.currentTodo} update={this.update}/> 
+          <TodoList todos={this.state.todos}/>
 
-App.propTypes  = {
-  txt: React.PropTypes.string,
-  cat:React.PropTypes.number.isRequired
-}
-App.defaultProps = {
-  txt: "default",
-  cat:React.PropTypes.number.isRequired
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;
