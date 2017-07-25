@@ -6,3 +6,7 @@ export const TodoForm = (props) => (
  		onChange={props.update} 
  		value = {props.currentTodo} />
  </form>)
+  TodoForm.propTypes = {
+    currentTodo: React.PropTypes.string.isRequired,
+    update: React.PropTypes.func.isRequired
+  }

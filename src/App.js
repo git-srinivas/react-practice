@@ -2,15 +2,16 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import {TodoForm,TodoList} from './components/todo'
+imoprt {addTodo} './lib/todoHelper'
 
 class App extends Component {
   constructor(){
     super();
     this.state = {
-      todos:[
-        {id:1,name:'Learn JSX cool',isComplete:false},
-        {id:2,name:'Build an Awesome App',isComplete:false},
-        {id:3,name:'Ship It!',isComplete:false}
+      todos: [
+        {id: 1, name: 'Learn JSX', isComplete: true},
+        {id: 2, name: 'Build an Awesome App', isComplete: false},
+        {id: 3, name: 'Ship It', isComplete: false}
       ],
     currentTodo : ''
     }  
