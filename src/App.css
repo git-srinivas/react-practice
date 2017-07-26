@@ -70,3 +70,6 @@ li:hover span.delete-item {
 .Footer a.active {
   font-weight:bold;
 }
+.error{
+  color: red
+}
