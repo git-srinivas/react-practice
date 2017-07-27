@@ -4,7 +4,7 @@ export const generateId = () => Math.floor(Math.random()*100000)
 
 export const findById = (id,list) => list.find(item => item.id === id)
 
-export const toggleTodo = (item) => ({...item,isComplete:!item.isComplete})
+export const toggleTodo = (item) => ({...item, isComplete:!item.isComplete})
 
 export const updateTodo = (update,list) => {
   const itemIndex = list.findIndex(item => item.id === update.id);
