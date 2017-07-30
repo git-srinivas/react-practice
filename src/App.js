@@ -4,7 +4,7 @@ import './App.css'
 import {TodoForm, TodoList,Footer} from './components/todo'
 import {addTodo, generateId, findById, toggleTodo, updateTodo, removeTodo, filterTodos} from './lib/todoHelpers'
 import {pipe, partial} from './lib/utils'
-import {loadTodos, createTodo} from './lib/todoService'
+import {loadTodos, createTodo, saveTodo, destroyTodo} from './lib/todoService'
 
 class App extends Component {
  state = {
@@ -27,12 +27,19 @@ class App extends Component {
     this.setState({
       todos:updatedTodos
     })
+    destroyTodo(id)
+      .then(() => this.showTempMessage('Todo Removed'))
   }
 
   handleToggle = (id) => {
-    const getUpdateTodos = pipe(findById, toggleTodo, partial(updateTodo,this.state.todos))
-    const updatedTodos = getUpdateTodos(id,this.state.todos)
+
+    const getToggledTodo = pipe(findById, toggleTodo)
+    const updated = getToggledTodo(id, this.state.todos)
+    const getUpdatedTodos = partial(updateTodo, this.state.todos)
+    const updatedTodos = getUpdatedTodos(updated)
     this.setState({todos: updatedTodos})
+      saveTodo(updated)
+        .then(() => this.showTempMessage('Todo Updated'))
   }
 
   handleSubmit = (eve) => {
