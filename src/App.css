@@ -57,11 +57,9 @@ li:hover span.delete-item {
 .error {
   color:red;
 }
-
-.success {
-  color:green;
+.success{
+  color: green;
 }
-
 .Footer a {
   padding-left:2px;
   padding-right:2px;
@@ -69,7 +67,4 @@ li:hover span.delete-item {
 
 .Footer a.active {
   font-weight:bold;
-}
-.error{
-  color: red
 }

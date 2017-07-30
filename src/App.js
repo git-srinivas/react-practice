@@ -1,23 +1,40 @@
 import React, { Component } from 'react'
 import logo from './logo.svg'
 import './App.css'
-import {TodoForm, TodoList} from './components/todo'
-import {addTodo, generateId, findById, toggleTodo, updateTodo} from './lib/todoHelpers'
+import {TodoForm, TodoList,Footer} from './components/todo'
+import {addTodo, generateId, findById, toggleTodo, updateTodo, removeTodo, filterTodos} from './lib/todoHelpers'
 import {pipe, partial} from './lib/utils'
+import {loadTodos, createTodo} from './lib/todoService'
+
 class App extends Component {
  state = {
-    todos: [
-      {id: 1, name: 'Learn JSX', isComplete: true},
-      {id: 2, name: 'Build an Awesome App', isComplete: false},
-      {id: 3, name: 'Ship It', isComplete: false}
-    ],
+    todos: [],
   currentTodo : ''
   }
+
+  static contextTypes = {
+    route: React.PropTypes.string
+  }
+
+  componentDidMount(){
+    loadTodos()
+      .then(todos => this.setState({todos}))
+  }
+
+  handleRemove = (id, evt) =>{
+    evt.preventDefault();
+    const updatedTodos = removeTodo(this.state.todos, id)
+    this.setState({
+      todos:updatedTodos
+    })
+  }
+
   handleToggle = (id) => {
     const getUpdateTodos = pipe(findById, toggleTodo, partial(updateTodo,this.state.todos))
-    const updatedTodos = getUpdateTodos(toggleTodo,this.state.todos)
+    const updatedTodos = getUpdateTodos(id,this.state.todos)
     this.setState({todos: updatedTodos})
   }
+
   handleSubmit = (eve) => {
     eve.preventDefault()
     const newId = generateId()
@@ -28,7 +45,16 @@ class App extends Component {
       currentTodo : '',
       errorMsg : ''
     })
+
+    createTodo(newTodo)
+      .then(() => this.showTempMessage('Todo added'))
   }
+
+  showTempMessage = (msg) => {
+    this.setState({message: msg})
+    setTimeout(() => this.setState({message: ''}), 2500)
+  }
+
   handleEmply = (evt) => {
     evt.preventDefault();
     this.setState({
@@ -42,6 +68,7 @@ class App extends Component {
   }
   render() {
     const submitHandler = this.state.currentTodo ? this.handleSubmit : this.handleEmply
+    const displayTodos = filterTodos(this.state.todos, this.context.route)
     return (
       <div className="App">
         <div className="App-header">
@@ -50,9 +77,11 @@ class App extends Component {
         </div>
         <div className="Todo-App">
           {this.state.errorMsg && <span className='error'>{this.state.errorMsg}</span>}
+          {this.state.message && <span className='success'>{this.state.message}</span>}
           <TodoForm currentTodo={this.state.currentTodo} update={this.update} handleSubmit={submitHandler}/>
-          <TodoList todos={this.state.todos} handleToggle={this.handleToggle}/>
-
+          <TodoList todos={displayTodos} handleToggle={this.handleToggle}
+            handleRemove = {this.handleRemove}/>
+          <Footer/>
         </div>
       </div>
     );
